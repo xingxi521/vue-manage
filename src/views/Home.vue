@@ -1,10 +1,12 @@
 <template>
     <div class="home-main">
         <div class="nav-left" :class="isCollapse?'fold-menu':''">
+            <!-- logo -->
             <div class="nav-left-logo">
                 <img src="./../assets/logo.png" alt="">
                 <span>Manger</span>
             </div>
+            <!-- 菜单 -->
             <el-menu
                 default-active="2"
                 class="el-menu-vertical-demo"
@@ -18,10 +20,12 @@
         </div>
         <div class="content-right" :class="isCollapse?'fold-content':''">
             <div class="top-bar">
+                <!-- 面包屑 -->
                 <div class="bar-left">
-                    <i :class="isCollapse?'el-icon-s-unfold':'el-icon-s-fold'" @click="toggleMenue"></i>
-                    <span>面包屑</span>
+                    <i :class="isCollapse?'el-icon-s-unfold':'el-icon-s-fold'" class="collapse-i" @click="toggleMenue"></i>
+                    <div class="bread"><Breadcrumb /></div>
                 </div>
+                <!-- 用户信息 -->
                 <div class="top-userinfo">
                     <el-badge :is-dot="noticeCount> 0 ? true : false" class="item"><i class="el-icon-bell bellicon"></i></el-badge>
                     <el-dropdown @command="dropMenuHandler">
@@ -35,6 +39,7 @@
                     </el-dropdown>
                 </div>
             </div>
+            <!-- 路由显示区域 -->
             <div class="router-wrapper">
                 <div class="router-page">
                     <router-view></router-view>
@@ -45,10 +50,12 @@
 </template>
 <script>
 import MenuTree from './MenuTree/MenuTree.vue'
+import Breadcrumb from '../components/Breadcrumb/Breadcrumb.vue'
 export default {
     name:'Home',
     components:{
-        MenuTree
+        MenuTree,
+        Breadcrumb
     },
     data(){
         return{
@@ -144,7 +151,9 @@ export default {
                 padding-right: 50px;
                 border-bottom: 1px solid #ddd;
                 .bar-left{
-                    i{
+                    display: flex;
+                    align-items: center;
+                    .collapse-i{
                         margin-right: 10px;
                         font-size: 18px;
                         cursor: pointer;
