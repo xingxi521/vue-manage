@@ -2,6 +2,7 @@ import axios from 'axios'
 import qs from 'querystring'
 import router from '../router'
 import { ElMessage } from 'element-plus'
+import stroage from '../utils/stroage'
 //创建axios实例
 const instace = axios.create({
     timeout:5000
@@ -14,10 +15,10 @@ instace.interceptors.request.use(config=>{
     // if(config.method === 'post'){
     //     config.data = config.data;
     // }
-    // const token = store.state.token;
-    // if(token){
-    //     config.headers.Authorization = token;
-    // }
+    const token = stroage.getItem('userInfo').token;
+    if(token){
+        config.headers.Authorization = token;
+    }
     return config;
 },error=>{
     return Promise.reject(error);
