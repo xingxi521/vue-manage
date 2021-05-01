@@ -1,6 +1,5 @@
 import { createRouter,createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import Welcome from '../views/Welcome/Welcome.vue'
 const routes = [
     {
         path:'/',
@@ -14,9 +13,17 @@ const routes = [
             {
                 path:'welcome',
                 name:'Welcome',
-                component:Welcome,
+                component:() => import('../views/Welcome/Welcome.vue'),
                 meta:{
                     name:'欢迎页'
+                }
+            },
+            {
+                path:'users',
+                name:'Users',
+                component:() => import('../views/Users/Users.vue'),
+                meta:{
+                    name:'用户管理'
                 }
             }
         ]

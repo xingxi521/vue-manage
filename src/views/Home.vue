@@ -41,9 +41,7 @@
             </div>
             <!-- 路由显示区域 -->
             <div class="router-wrapper">
-                <div class="router-page">
-                    <router-view></router-view>
-                </div>
+                <router-view></router-view>
             </div>
         </div>
     </div>
@@ -186,10 +184,6 @@ export default {
                 background-color: #eef0f3;
                 padding: 20px;
                 height: calc(~"100vh - 50px");
-                .router-page{
-                    background-color: #fff;
-                    height: 100%;
-                }
             }
         }
     }

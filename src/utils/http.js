@@ -1,5 +1,4 @@
 import axios from 'axios'
-import qs from 'querystring'
 import router from '../router'
 import { ElMessage } from 'element-plus'
 import stroage from '../utils/stroage'
@@ -12,12 +11,9 @@ const instace = axios.create({
 
 //设置拦截器
 instace.interceptors.request.use(config=>{
-    // if(config.method === 'post'){
-    //     config.data = config.data;
-    // }
-    const token = stroage.getItem('userInfo').token;
-    if(token){
-        config.headers.Authorization = token;
+    const localStroage = stroage.getItem('userInfo');
+    if(localStroage){
+        config.headers.Authorization = localStroage.token;
     }
     return config;
 },error=>{

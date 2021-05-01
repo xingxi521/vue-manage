@@ -19,6 +19,7 @@ export default {
         justify-content: center;
         align-items: center;
         height: 100%;
+        background-color: #fff;
         .welcome-left{
             margin-bottom: 50px;
             .main-title{
