@@ -4,8 +4,8 @@
 const env = import.meta.env.MODE;
 const EnvConfig = {
     development:{
-        // baseUrl:'https://www.fastmock.site/mock/756303ac8aae70f35d0436f5f51b7ac6/api',
-        baseUrl:'/api',
+        baseUrl:'https://www.fastmock.site/mock/756303ac8aae70f35d0436f5f51b7ac6/api',
+        // baseUrl:'/api',
     },
     test:{
         baseUrl:'https://www.fastmock.site/mock/756303ac8aae70f35d0436f5f51b7ac6/api',

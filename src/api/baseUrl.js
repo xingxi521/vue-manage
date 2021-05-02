@@ -7,4 +7,5 @@ export default {
     getRolesNameList:'/roles/operate',//获取角色名称列表
     getDeptList:'/dept/list',//获取部门列表
     postUserC_U:'/users/operate',//新建/修改用户
+    postMenuC_U_D:'/menu/operate',//新建/修改/删除菜单
 }

@@ -35,5 +35,9 @@ export default {
     //新建/修改用户
     postUserC_U(params){
         return axios.post(config.baseUrl+baseUrl.postUserC_U,params);
+    },
+    //新建/修改/删除菜单
+    postMenuC_U_D(params){
+        return axios.post(config.baseUrl+baseUrl.postMenuC_U_D,params);
     }
 }
