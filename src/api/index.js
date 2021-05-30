@@ -39,5 +39,19 @@ export default {
     //新建/修改/删除菜单
     postMenuC_U_D(params){
         return axios.post(config.baseUrl+baseUrl.postMenuC_U_D,params);
+    },
+    // 获取角色列表数据
+    getRolesList(params){
+        return axios.get(config.baseUrl+baseUrl.getRolesList,{
+            params
+        });
+    },
+    // 角色创建/编辑/删除
+    postRolesC_U_D(params){
+        return axios.post(config.baseUrl+baseUrl.postRolesC_U_D,params);
+    },
+    // 设置角色权限
+    postUpdatePermission(params){
+        return axios.post(config.baseUrl+baseUrl.postUpdatePermission,params);
     }
 }

@@ -64,6 +64,7 @@
                 :page-size="pageData.pageSize"
                 :total="pageData.total"
                 class="pagination"
+                @current-change="handleCurrentChange"
                 >
                 </el-pagination>
             </div>
@@ -191,8 +192,9 @@ export default {
         ]);
         // 分页数据对象
         var pageData = reactive({
-            pageNum:1,
-            pageSize:10
+            pageNum: 1,
+            pageSize: 10,
+            total: 0
         });
         //当前选中的用户数组
         const selectUserArr = ref([]);
@@ -287,6 +289,11 @@ export default {
             const res = await ctx.$api.getDeptList();
             deptList.value = res;
         }
+        // 分页触发事件
+        const handleCurrentChange = (current) => {
+            pageData.pageNum = current;
+            getRolesList();
+        }
         //新增用户弹窗取消按钮事件
         const dialogCancelHandler = ()=>{
             userDialogVisible.value = false;
@@ -349,7 +356,8 @@ export default {
             dialogCancelHandler,
             dialogSubmitHandler,
             handleEdit,
-            addUserHandler
+            addUserHandler,
+            handleCurrentChange
         }
     }
 }
