@@ -19,7 +19,7 @@ const routes = [
                 }
             },
             {
-                path:'users',
+                path:'/system/users',
                 name:'Users',
                 component:() => import('../views/Users/Users.vue'),
                 meta:{
@@ -27,7 +27,7 @@ const routes = [
                 }
             },
             {
-                path:'menu',
+                path:'/system/menu',
                 name:'Menu',
                 component:() => import('../views/Menu/Menu.vue'),
                 meta:{

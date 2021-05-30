@@ -13,6 +13,7 @@
                 background-color="#001529"
                 text-color="#fff"
                 active-text-color="#409eff"
+                router
                 :collapse="isCollapse"
             >
                 <MenuTree :menuList="menuList"/>
@@ -88,10 +89,7 @@ export default {
         },
         //获取菜单列表数据
         async getMenuListRequest(){
-            const res = await this.$api.postMenuList({
-                menuName:'123',
-                menuState:1
-            });
+            const res = await this.$api.postMenuList();
             this.menuList = res;
             console.log('菜单列表数据',res);
         }

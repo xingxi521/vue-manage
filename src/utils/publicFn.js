@@ -54,5 +54,25 @@
             s[1] += new Array(prec - s[1].length + 1).join('0');
         }
         return s.join(dec);
+    },
+    deepClone(obj){
+        //先判断传入的obj是不是引用类型，不是的话直接返回
+        if(typeof obj !== "object" || obj == null){
+            return obj;
+        }
+        //然后判断obj是对象还是数组
+        var result;
+        if(obj instanceof Array){
+            result = [];
+        }else{
+            result = {};
+        }
+        for(var key in obj){
+            if(obj.hasOwnProperty(key)){
+                //判断key是不是自身属性
+                result[key] = this.deepClone(obj[key]);
+            }
+        }
+        return result;
     }
 }

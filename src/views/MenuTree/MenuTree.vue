@@ -8,7 +8,10 @@
             <!-- 递归组件，再次循环判断子菜单 -->
             <MenuTree :menuList="item.children"/>
         </el-submenu>
-        <el-menu-item v-else :index="item.path">{{item.menuName}}</el-menu-item>
+        <el-menu-item v-else :index="item.path">
+            <i :class="item.icon"></i>
+            <template #title>{{item.menuName}}</template>
+        </el-menu-item>
     </template>
 </template>
 <script>

@@ -57,8 +57,8 @@
                     <span style="color:#999;margin-left:10px">如果不选创建一级菜单</span>
                 </el-form-item>
                 <el-form-item label="菜单类型" prop="menuType">
-                    <el-radio v-model="menuForm.menuType" :label="'1'">菜单</el-radio>
-                    <el-radio v-model="menuForm.menuType" :label="'2'">按钮</el-radio>
+                    <el-radio v-model="menuForm.menuType" :label="1">菜单</el-radio>
+                    <el-radio v-model="menuForm.menuType" :label="2">按钮</el-radio>
                 </el-form-item>
                 <el-form-item :label="menuForm.menuType === 1?'菜单名称':'按钮名称'" prop="menuName">
                     <el-input v-model="menuForm.menuName" :placeholder="menuForm.menuType == 1?'请输入菜单名称':'输入按钮名称'"></el-input>
@@ -74,6 +74,13 @@
                 </el-form-item>
                 <el-form-item label="组件路径" prop="component" v-if="menuForm.menuType == 1">
                     <el-input v-model="menuForm.component" placeholder="请输入组件路径"></el-input>
+                </el-form-item>
+                <el-form-item label="菜单状态" prop="menuState" v-if="menuForm.menuType == 1">
+                    <el-radio-group v-model="menuForm.menuState">
+                        <el-radio :label="1">正常</el-radio>
+                        <el-radio :label="2">停用</el-radio>
+                    </el-radio-group>
+                    
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -149,7 +156,9 @@ export default {
             dialogVisible:false,//添加菜单弹窗控制
             //添加菜单表单数据
             menuForm:{
-                menuType:'1'
+                menuType:1,
+                menuState:1,
+                parentId:[null]
             },
             //表单验证规则
             rules:{
@@ -168,7 +177,9 @@ export default {
         onResetHandler(formName){
             // this.$refs[formName].resetFields();
             this.menuForm = {
-                menuType:'1'
+                menuType:1,
+                menuState:1,
+                parentId:[null]
             };
         },
         //获取菜单列表
@@ -211,8 +222,8 @@ export default {
                 this.action = 'create';
             }else{//每行的添加按钮
                 this.$nextTick(()=>{
-                    this.menuForm.parentId = [...row.parentId,row._id];
-                    this.menuForm.menuType = '1';
+                    this.menuForm.parentId = [...row.parentId,row._id].filter(item => item);
+                    this.menuForm.menuType = 1;
                 });
                 
             }
@@ -248,10 +259,10 @@ export default {
             });
         },
         //删除菜单按钮事件
-        handleDelete(row){
+        async handleDelete(row){
             this.action = "delete";
-            this.menuForm._id = row._id;
-            this.postMenuC_U_DRequest();
+            await this.$api.postMenuC_U_D({_id: row._id, action:this.action});
+            this.$message.success('删除成功')
         }
     }
 }

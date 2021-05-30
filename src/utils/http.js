@@ -13,7 +13,7 @@ const instace = axios.create({
 instace.interceptors.request.use(config=>{
     const localStroage = stroage.getItem('userInfo');
     if(localStroage){
-        config.headers.Authorization = localStroage.token;
+        config.headers.Authorization = 'Bearer ' + localStroage.token;
     }
     return config;
 },error=>{
