@@ -11,4 +11,6 @@ export default {
     getRolesList:'/roles/list', // 获取角色列表数据
     postRolesC_U_D:'/roles/operate', // 角色创建/编辑/删除
     postUpdatePermission:'/roles/update/permission', // 设置角色权限
+    getAllUserList:'/users/all/list', // 获取所有用户列表
+    postDeptC_U_D:'/dept/operate', // 新建/修改/删除部门
 }

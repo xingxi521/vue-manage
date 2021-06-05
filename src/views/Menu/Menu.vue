@@ -263,6 +263,7 @@ export default {
             this.action = "delete";
             await this.$api.postMenuC_U_D({_id: row._id, action:this.action});
             this.$message.success('删除成功')
+            this.getMenuListRequest()
         }
     }
 }

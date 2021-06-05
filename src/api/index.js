@@ -53,5 +53,15 @@ export default {
     // 设置角色权限
     postUpdatePermission(params){
         return axios.post(config.baseUrl+baseUrl.postUpdatePermission,params);
+    },
+    // 获取所有用户列表
+    getAllUserList(params) {
+        return axios.get(config.baseUrl+baseUrl.getAllUserList,{
+            params
+        })
+    },
+    //新建/修改/删除部门
+    postDeptC_U_D(params){
+        return axios.post(config.baseUrl+baseUrl.postDeptC_U_D,params);
     }
 }
