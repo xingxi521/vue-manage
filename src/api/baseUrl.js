@@ -13,4 +13,5 @@ export default {
     postUpdatePermission:'/roles/update/permission', // 设置角色权限
     getAllUserList:'/users/all/list', // 获取所有用户列表
     postDeptC_U_D:'/dept/operate', // 新建/修改/删除部门
+    getPermissonMenuList: '/menu/getPermissonMenuList', // 根据用户获取对应的菜单权限列表
 }

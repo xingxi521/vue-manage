@@ -14,7 +14,7 @@
         <!-- 表格区域 -->
         <div class="roles-bottom">
             <div class="roles-bottom-top">
-                <el-button type="primary" @click="createHandler">创建角色</el-button>
+                <el-button type="primary" @click="createHandler" v-permisson="'role-create'">创建角色</el-button>
             </div>
             <div class="roles-bottom-table">
                 <el-table
@@ -34,9 +34,9 @@
                     <!-- 操作 -->
                     <el-table-column label="操作" width="260" align="center">
                         <template #default="scope">
-                            <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
-                            <el-button size="mini" type="primary" @click="handlerSetPermission(scope.row)">设置权限</el-button>
-                            <el-button size="mini" type="danger" @click="handleDelete(scope.row,'delete')">删除</el-button>
+                            <el-button size="mini" @click="handleEdit(scope.row)" v-permisson="'role-edit'">编辑</el-button>
+                            <el-button size="mini" type="primary" @click="handlerSetPermission(scope.row)" v-permisson="'role-setpermission'">设置权限</el-button>
+                            <el-button size="mini" type="danger" @click="handleDelete(scope.row,'delete')" v-permisson="'role-delete'">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>

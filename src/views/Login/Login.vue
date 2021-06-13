@@ -17,6 +17,7 @@
     </div>
 </template>
 <script>
+import publicFn from '../../utils/publicFn'
 export default {
     name:'Login',
     data(){
@@ -33,19 +34,30 @@ export default {
     },
     methods:{
         loginHandler(){
-            this.$refs['ruleForm'].validate((valid) => {
+            this.$refs['ruleForm'].validate(async (valid) => {
                 if (valid) {
-                    this.$api.postLogin({
-                        userName:this.formData.userName,
-                        userPwd:this.formData.passWord
-                    }).then(res=>{
-                        this.$store.commit('SET_USERINFO',res);
-                        this.$router.replace('/');
+                    const res = await this.$api.postLogin({
+                        userName: this.formData.userName,
+                        userPwd: this.formData.passWord
                     })
+                    this.$store.commit('SET_USERINFO',res);
+                    await this.loadAsyncRoutes()
+                    this.$router.replace('/');
                 } else {
                     return false;
                 }
             });
+        },
+        async loadAsyncRoutes() {
+            try {
+                const { menuList } = await this.$api.getPermissonMenuList()
+                const routes = publicFn.gennerateRoutes(menuList)
+                routes.forEach(item => {
+                    this.$router.addRoute('Home',item)
+                })
+            } catch (error) {
+                console.log(error.stack);
+            }
         }
     }
 }

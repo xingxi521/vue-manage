@@ -26,8 +26,8 @@
         <!-- 表格区域 -->
         <div class="users-bottom">
             <div class="users-bottom-top">
-                <el-button type="primary" @click="addUserHandler">新增用户</el-button>
-                <el-button type="danger" @click="handleDelete(null,'dels')">批量删除</el-button>
+                <el-button type="primary" @click="addUserHandler" v-permisson="'user-create'">新增用户</el-button>
+                <el-button type="danger" @click="handleDelete(null,'dels')" v-permisson="'user-deletes'">批量删除</el-button>
             </div>
             <div class="users-bottom-table">
                 <el-table
@@ -53,8 +53,8 @@
                     <!-- 操作 -->
                     <el-table-column label="操作" width="180" align="center">
                         <template #default="scope">
-                            <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
-                            <el-button size="mini" type="danger" @click="handleDelete(scope.row,'del')">删除</el-button>
+                            <el-button size="mini" @click="handleEdit(scope.row)" v-permisson="'user-edit'">编辑</el-button>
+                            <el-button size="mini" type="danger" @click="handleDelete(scope.row,'del')" v-permisson="'user-delete'">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>

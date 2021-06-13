@@ -89,9 +89,10 @@ export default {
         },
         //获取菜单列表数据
         async getMenuListRequest(){
-            const res = await this.$api.postMenuList();
-            this.menuList = res;
-            console.log('菜单列表数据',res);
+            const res = await this.$api.getPermissonMenuList();
+            this.menuList = res.menuList;
+            this.$store.commit('SET_MENULIST',res.menuList)
+            this.$store.commit('SET_BTNLIST',res.btnList)
         }
     }
 }
