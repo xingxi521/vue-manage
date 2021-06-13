@@ -1,8 +1,11 @@
 import { createRouter,createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import api from '../api'
+import Welcome from '../views/Welcome/Welcome.vue'
+import Login from '../views/Login/Login.vue'
+import NotFound from '../views/404.vue'
 import publicFn from '../utils/publicFn'
 import storage from '../utils/stroage'
+import store from '../store'
 const routes = [
     {
         path:'/',
@@ -16,7 +19,7 @@ const routes = [
             {
                 path:'welcome',
                 name:'Welcome',
-                component:() => import('../views/Welcome/Welcome.vue'),
+                component: Welcome,
                 meta:{
                     name:'欢迎页'
                 }
@@ -26,7 +29,7 @@ const routes = [
     {
         path:'/login',
         name:'Login',
-        component:()=>import('../views/Login/Login.vue'),
+        component: Login,
         meta:{
             name:'登录页面'
         }
@@ -34,7 +37,7 @@ const routes = [
     {
         path:'/404',
         name:'404',
-        component:()=>import('../views/404.vue')
+        component: NotFound
     }
 ];
 
@@ -44,12 +47,12 @@ const router = createRouter({
 })
 
 // 加载动态路由
-
-async function loadAsyncRoutes() {
+function loadAsyncRoutes() {
     try {
         // 有登录再进行路由表动态加载
         if (storage.getItem('userInfo') && storage.getItem('userInfo').token) {
-            const { menuList } = await api.getPermissonMenuList()
+            // const { menuList } = await api.getPermissonMenuList()
+            const menuList = store.state.menuList || storage.getItem('menuList')
             const routes = publicFn.gennerateRoutes(menuList)
             routes.forEach(item => {
                 router.addRoute('Home',item)
@@ -61,8 +64,7 @@ async function loadAsyncRoutes() {
 }
 
 // 进入路由守卫前，路由表必须加载完，否则如果在守卫里再加 即使添加成功了，也不生效了
-await loadAsyncRoutes()
-
+loadAsyncRoutes()
 // 判断是否具备当前路由页面权限
 function checkPermisson(path) {
     const hasPermisson = router.getRoutes().filter(item => item.path === path).length
@@ -72,8 +74,7 @@ function checkPermisson(path) {
         return false
     }
 }
-
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
     if (checkPermisson(to.path)) {
         next()
     } else {

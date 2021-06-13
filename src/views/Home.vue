@@ -79,6 +79,8 @@ export default {
                 return
             }else if(command === 'logout'){//退出登陆
                 this.$store.commit('SET_USERINFO','');
+                this.$store.commit('SET_MENULIST','');
+                this.$store.commit('SET_BTNLIST','');
                 this.$router.replace('/login');
             }
         },

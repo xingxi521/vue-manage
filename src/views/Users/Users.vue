@@ -4,7 +4,7 @@
         <div class="users-top">
             <el-form :inline="true" :model="selectData" ref="selectForm">
                 <el-form-item label="用户ID" prop="userId">
-                    <el-input v-model="selectData.userId" placeholder="请输入用户ID"></el-input>
+                    <el-input v-model="selectData.userId" type="Number" placeholder="请输入用户ID"></el-input>
                 </el-form-item>
                 <el-form-item label="用户名" prop="userName">
                     <el-input v-model="selectData.userName" placeholder="请输入用户名"></el-input>
@@ -134,7 +134,7 @@ import publicFn from '../../utils/publicFn'
 export default {
     name:'Users',
     setup() {
-        const { ctx } = getCurrentInstance(); 
+        const { proxy } = getCurrentInstance(); 
         const selectData = reactive({
             state:1
         });//查询功能表单对象
@@ -233,7 +233,7 @@ export default {
         const getUserListRequest = async () =>{
             const params = {...selectData,...pageData};
             try {
-                const res = await ctx.$api.getUserList(params);
+                const res = await proxy.$api.getUserList(params);
                 userData.value = res.list;
                 pageData.total = res.page.total;
             } catch (error) {
@@ -246,7 +246,7 @@ export default {
         }
         //重置事件
         const onResetHandler = (name)=>{
-            ctx.$refs[name].resetFields();
+            proxy.$refs[name].resetFields();
         }
         //表格选中事件
         const selectHandler = (selection, row)=>{
@@ -259,34 +259,34 @@ export default {
         //删除用户事件
         const handleDelete = async (row,action) =>{
             if(action === 'del'){
-                var res = await ctx.$api.postDelUser({
+                var res = await proxy.$api.postDelUser({
                     userIds:[row.userId]
                 });
             }else{
                 if(selectUserArr.value.length > 0){
-                    var res = await ctx.$api.postDelUser({
+                    var res = await proxy.$api.postDelUser({
                         userIds:[...selectUserArr.value]
                     });
                 }else{
-                    ctx.$message.error('您还没选中需要删除的用户');
+                    proxy.$message.error('您还没选中需要删除的用户');
                     return
                 }
             }
             if(res.nModified >= 1){
-                ctx.$message.success('删除成功');
+                proxy.$message.success('删除成功');
                 getUserListRequest();
             }else{
-                ctx.$message.error('删除失败');
+                proxy.$message.error('删除失败');
             }
         }
         //获取角色名称列表
         const getRolesRequest = async ()=>{
-            const res = await ctx.$api.getRolesNameList();
+            const res = await proxy.$api.getRolesNameList();
             rolesNameList.value = res;
         }
         //获取部门列表
         const getDeptListRequest = async ()=>{
-            const res = await ctx.$api.getDeptList();
+            const res = await proxy.$api.getDeptList();
             deptList.value = res;
         }
         // 分页触发事件
@@ -301,23 +301,23 @@ export default {
         }
         //新增用户弹窗确定按钮事件
         const dialogSubmitHandler = ()=>{
-            ctx.$refs['userRuleForm'].validate(async (valid) => {
+            proxy.$refs['userRuleForm'].validate(async (valid) => {
                 if (valid) {
                     let params = {...userForm};
                     if(params.userEmail){
                         params.userEmail += '@qq.com' 
                     }
                     params.action = action.value;
-                    await ctx.$api.postUserC_U(params);
+                    await proxy.$api.postUserC_U(params);
                     if(params.action === 'add'){
-                        ctx.$message.success('添加用户信息成功');
+                        proxy.$message.success('添加用户信息成功');
                     }else{
-                        ctx.$message.success('修改用户信息成功');
+                        proxy.$message.success('修改用户信息成功');
                     }
                     userDialogVisible.value = false;
                     getUserListRequest();
                 } else {
-                    ctx.$message.error('您填写的信息不符合规则，请重新输入');
+                    proxy.$message.error('您填写的信息不符合规则，请重新输入');
                     return false;
                 }
             });
@@ -326,7 +326,7 @@ export default {
         const handleEdit = (row)=>{
             userDialogVisible.value = true;
             action.value = 'edit';
-            ctx.$nextTick(()=>{
+            proxy.$nextTick(()=>{
                 Object.assign(userForm,row);
             });
         }

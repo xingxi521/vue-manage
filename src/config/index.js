@@ -10,8 +10,9 @@ const EnvConfig = {
     test:{
         baseUrl:'https://www.fastmock.site/mock/756303ac8aae70f35d0436f5f51b7ac6/api',
     },
-    prod:{
-        baseUrl:'https://www.fastmock.site/mock/756303ac8aae70f35d0436f5f51b7ac6/api',
+    production:{
+        // baseUrl:'https://www.fastmock.site/mock/756303ac8aae70f35d0436f5f51b7ac6/api',
+        baseUrl:'http://121.5.180.45:3001/api',
     }
 }
 export default {

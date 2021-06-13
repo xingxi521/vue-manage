@@ -213,7 +213,7 @@ export default {
         },
         //查询按钮事件
         onQueryHandler(){
-            this.getMenuListRequest();
+            // this.getMenuListRequest();
         },
         //添加菜单按钮事件
         addMenuHandler(type,row){
