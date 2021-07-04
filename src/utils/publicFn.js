@@ -3,8 +3,8 @@
  */
  export default {
     //时间格式化 formateDate(new Date('2021-01-17T13:32:06.381Z'))
-    formateDate(date) {
-        let fmt = 'yyyy-MM-dd hh:mm:ss'
+    formateDate(date, format) {
+        let fmt = format || 'yyyy-MM-dd hh:mm:ss'
         if (/(y+)/.test(fmt)) {
             fmt = fmt.replace(RegExp.$1, date.getFullYear())
         }

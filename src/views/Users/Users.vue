@@ -55,6 +55,8 @@
                         <template #default="scope">
                             <el-button size="mini" @click="handleEdit(scope.row)" v-permisson="'user-edit'">编辑</el-button>
                             <el-button size="mini" type="danger" @click="handleDelete(scope.row,'del')" v-permisson="'user-delete'">删除</el-button>
+                            <!-- <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
+                            <el-button size="mini" type="danger" @click="handleDelete(scope.row,'del')">删除</el-button> -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -292,7 +294,7 @@ export default {
         // 分页触发事件
         const handleCurrentChange = (current) => {
             pageData.pageNum = current;
-            getRolesList();
+            getUserListRequest();
         }
         //新增用户弹窗取消按钮事件
         const dialogCancelHandler = ()=>{

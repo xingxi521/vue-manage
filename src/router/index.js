@@ -23,6 +23,46 @@ const routes = [
                 meta:{
                     name:'欢迎页'
                 }
+            },
+            // {
+            //     path:'/system/users',
+            //     name:'Users',
+            //     component:() => import('../views/Users/Users.vue'),
+            //     meta:{
+            //         name:'用户管理'
+            //     }
+            // },
+            // {
+            //     path:'/system/menu',
+            //     name:'Menu',
+            //     component:() => import('../views/Menu/Menu.vue'),
+            //     meta:{
+            //         name:'菜单管理'
+            //     }
+            // },
+            // {
+            //     path:'/system/roles',
+            //     name:'Roles',
+            //     component:() => import('../views/Roles/Roles.vue'),
+            //     meta:{
+            //         name:'角色管理'
+            //     }
+            // },
+            // {
+            //     path:'/system/dept',
+            //     name:'Dept',
+            //     component:() => import('../views/Dept/Dept.vue'),
+            //     meta:{
+            //         name:'部门管理'
+            //     }
+            // }
+            {
+                path:'/audit/leave',
+                name:'Leave',
+                component:() => import('../views/Leave/Leave.vue'),
+                meta:{
+                    name:'休假申请'
+                }
             }
         ]
     },

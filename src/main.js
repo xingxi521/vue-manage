@@ -6,6 +6,7 @@ import 'element-plus/lib/theme-chalk/index.css';
 import stroage from './utils/stroage';
 import api from './api';
 import store from './store'
+import "element-plus/packages/theme-chalk/src/base.scss"
 const app = createApp(App);
 // 按钮权限判断
 app.directive('permisson', {

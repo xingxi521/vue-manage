@@ -22,6 +22,7 @@
         <div class="menu-bottom">
             <div class="menu-bottom-top">
                 <el-button type="primary" @click="addMenuHandler(1)" v-permisson="'menu-create'">新增菜单</el-button>
+                <!-- <el-button type="primary" @click="addMenuHandler(1)" >新增菜单</el-button> -->
             </div>
             <el-table
             :data="menuListData"
@@ -31,6 +32,9 @@
                 <el-table-column :prop="item.props" :label="item.label" v-for="item in tablePros" :key="item.props" :formatter="item.formatter" show-overflow-tooltip></el-table-column>
                 <el-table-column label="操作" width="250">
                     <template #default="scope">
+                        <!-- <el-button size="mini" @click="addMenuHandler(2, scope.row)" type="primary" >添加</el-button>
+                        <el-button size="mini" @click="handleEdit(scope.row)" >编辑</el-button>
+                        <el-button size="mini" type="danger" @click="handleDelete(scope.row)" >删除</el-button> -->
                         <el-button size="mini" @click="addMenuHandler(2, scope.row)" type="primary" v-permisson="'menu-create'">添加</el-button>
                         <el-button size="mini" @click="handleEdit(scope.row)" v-permisson="'menu-edit'">编辑</el-button>
                         <el-button size="mini" type="danger" @click="handleDelete(scope.row)" v-permisson="'menu-delete'">删除</el-button>

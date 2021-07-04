@@ -67,5 +67,15 @@ export default {
     //获取用户列表
     getPermissonMenuList(){
         return axios.get(config.baseUrl+baseUrl.getPermissonMenuList)
+    },
+    //获取审批列表数据
+    getLeaveList(params){
+        return axios.get(config.baseUrl+baseUrl.getLeaveList, {
+            params
+        })
+    },
+    // 申请休假提交接口
+    postLeave_C(params){
+        return axios.post(config.baseUrl+baseUrl.postLeave_C,params);
     }
 }

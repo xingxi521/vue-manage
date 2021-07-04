@@ -14,4 +14,6 @@ export default {
     getAllUserList:'/users/all/list', // 获取所有用户列表
     postDeptC_U_D:'/dept/operate', // 新建/修改/删除部门
     getPermissonMenuList: '/menu/getPermissonMenuList', // 根据用户获取对应的菜单权限列表
+    getLeaveList: '/leave/list', // 获取审批列表数据
+    postLeave_C: '/leave/operate', // 申请休假提交接口
 }
