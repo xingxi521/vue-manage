@@ -16,4 +16,5 @@ export default {
     getPermissonMenuList: '/menu/getPermissonMenuList', // 根据用户获取对应的菜单权限列表
     getLeaveList: '/leave/list', // 获取审批列表数据
     postLeave_C: '/leave/operate', // 申请休假提交接口
+    postApprove: '/leave/approve', // 审核
 }

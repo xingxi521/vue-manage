@@ -56,14 +56,6 @@ const routes = [
             //         name:'部门管理'
             //     }
             // }
-            {
-                path:'/audit/leave',
-                name:'Leave',
-                component:() => import('../views/Leave/Leave.vue'),
-                meta:{
-                    name:'休假申请'
-                }
-            }
         ]
     },
     {

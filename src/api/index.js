@@ -77,5 +77,9 @@ export default {
     // 申请休假提交接口
     postLeave_C(params){
         return axios.post(config.baseUrl+baseUrl.postLeave_C,params);
+    },
+    // 审核接口
+    postApprove(params){
+        return axios.post(config.baseUrl+baseUrl.postApprove,params);
     }
 }

@@ -28,7 +28,7 @@
                 </div>
                 <!-- 用户信息 -->
                 <div class="top-userinfo">
-                    <el-badge :is-dot="noticeCount> 0 ? true : false" class="item"><i class="el-icon-bell bellicon"></i></el-badge>
+                    <el-badge :is-dot="noticeCount > 0 ? true : false" class="item" @click="$router.push('/audit/approve')" style="cursor: pointer"><i class="el-icon-bell bellicon"></i></el-badge>
                     <el-dropdown @command="dropMenuHandler">
                         <span class="userinfo-name">{{userInfo.userName}}</span>
                         <template #dropdown>
@@ -58,15 +58,20 @@ export default {
     },
     data(){
         return{
-            isCollapse:false,//菜单是否折叠
-            userInfo:this.$store.state.userInfo,//用户信息
-            noticeCount:0,//待处理信息数量
-            menuList:[],//菜单列表数据
+            isCollapse: false, // 菜单是否折叠
+            userInfo: this.$store.state.userInfo, // 用户信息
+            noticeCount: 0, // 待处理信息数量
+            menuList: [], // 菜单列表数据
         }
     },
     mounted() {
        this.getApproveCountRequest();
        this.getMenuListRequest();
+    },
+    computed: {
+        noticeCount() {
+            return this.$store.state.noticeCount
+        }
     },
     methods:{
         //收缩菜单
@@ -87,7 +92,7 @@ export default {
         //获取待处理审批数量
         async getApproveCountRequest(){
             const count = await this.$api.getApproveCount();
-            this.noticeCount = count;
+            this.$store.commit('SET_NOTICE_COUNT', count)
         },
         //获取菜单列表数据
         async getMenuListRequest(){

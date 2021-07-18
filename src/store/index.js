@@ -4,7 +4,8 @@ import mutations from './mutations'
 const state = {
     userInfo: stroage.getItem('userInfo') || {},
     menuList: stroage.getItem('menuList') || [],
-    btnList: stroage.getItem('btnList') || []
+    btnList: stroage.getItem('btnList') || [],
+    noticeCount: 0
 }
 export default createStore({
     state,

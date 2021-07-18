@@ -22,12 +22,7 @@
     <!-- 表格区域 -->
     <div class="leave-bottom">
       <div class="leave-bottom-top">
-        <el-button
-          type="primary"
-					@click="applyHandler"
-          v-permisson="'leave-create'"
-          >申请休假</el-button
-        >
+        
       </div>
       <div class="leave-bottom-table">
         <el-table ref="leaveTable" :data="leaveData">
@@ -45,18 +40,11 @@
           <el-table-column label="操作" width="180" align="center">
             <template #default="scope">
               <el-button
-                size="mini"
-                @click="handleSee(scope.row)"
-                v-permisson="'leave-see'"
-                >查看</el-button
-              >
-              <el-button
                 v-if="[1, 2].includes(scope.row.applyState)"
                 size="mini"
-                type="danger"
-                @click="handleDelete(scope.row._id)"
-                v-permisson="'leave-delete'"
-                >作废</el-button
+                @click="handleAudit(scope.row)"
+                v-permisson="'approve-audit'"
+                >审核</el-button
               >
             </template>
           </el-table-column>
@@ -71,55 +59,16 @@
         >
         </el-pagination>
       </div>
-			<!-- 申请休假弹窗 -->
-			<el-dialog
-			title="申请休假"
-			v-model="isShow"
-			width="40%"
-			>
-				<el-form :model="applyForm" :rules="rules" ref="applyRuleForm" label-width="100px">
-					<el-form-item label="休假类型" prop="applyType">
-						<el-select v-model="applyForm.applyType" placeholder="请选择休假类型">
-							<el-option label="事假" :value="1"></el-option>
-							<el-option label="调休" :value="2"></el-option>
-							<el-option label="年假" :value="3"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="休假时间" prop="date">
-						<el-date-picker
-							v-model="applyForm.date"
-							@change="leaveTimeChange"
-							type="daterange"
-							range-separator="至"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="休假时长" prop="leaveTime">
-						{{applyForm.leaveTime}}
-					</el-form-item>
-					<el-form-item label="休假原因" prop="reasons">
-						<el-input type="textarea" v-model="applyForm.reasons"></el-input>
-					</el-form-item>
-				</el-form>
-				<template #footer>
-					<span class="dialog-footer">
-						<el-button @click="dialogCancelHandler">取 消</el-button>
-						<el-button type="primary" @click="dialogSubmitHandler">确 定</el-button>
-					</span>
-				</template>
-			</el-dialog>
-      <!-- 查看休假详情弹窗 -->
+      <!-- 审核弹窗 -->
       <el-dialog
+        title="审核"
         v-model="detailShow"
         width="40%"
       >
-        <el-steps :active="detailData.applyState > 2 ? 3 : detailData.applyState" align-center>
-          <el-step title="待审核"></el-step>
-          <el-step title="审核中"></el-step>
-          <el-step title="审核通过/审核拒绝"></el-step>
-        </el-steps>
-        <el-form label-width="168px" label-suffix=":">
+        <el-form ref="ruleForm" label-width="168px" label-suffix=":" :model="approveForm" :rules="rules">
+          <el-form-item label="申请人">
+            {{ detailData.applyUser }}
+          </el-form-item>
           <el-form-item label="休假类型">
             {{ detailData.applyType }}
           </el-form-item>
@@ -138,7 +87,16 @@
           <el-form-item label="审核人">
             {{ detailData.curAuditUserName }}
           </el-form-item>
+          <el-form-item label="审核意见" prop="remark">
+            <el-input type="textarea" :rows="3" placeholder="请输入审核意见" v-model="approveForm.remark"></el-input>
+          </el-form-item>
         </el-form>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button type="success" @click="auditHandler('pass')">通过</el-button>
+            <el-button type="primary" @click="auditHandler('refuse')">驳回</el-button>
+          </span>
+        </template>
       </el-dialog>
     </div>
   </div>
@@ -151,7 +109,7 @@ export default {
   setup() {
     const { proxy } = getCurrentInstance();
     const queryForm = reactive({
-      applyState: 0,
+      applyState: 1,
     }); //查询功能表单对象
     // 动态表格数据对象
     const leaveData = ref([]);
@@ -160,6 +118,13 @@ export default {
       {
         prop: "orderNo",
         label: "单号",
+      },
+      {
+        prop: "applyName",
+        label: "申请人",
+        formatter(row, col, value){
+          return row.applyUser.userName
+        }
       },
       {
         prop: "",
@@ -222,39 +187,29 @@ export default {
       pageSize: 10,
       total: 0,
     });
-		// 申请弹出显示开关
-		const isShow = ref(false);
-		// 申请请假表单
-		const applyForm = reactive({
-			applyType: 1,
-			date: '',
-			leaveTime: '',
-			reasons: ''
-		});
-    //表单验证规则
+    // 审核显示开关
+    const detailShow = ref(false)
+    // 审核详情数据
+    const detailData = reactive({})
+    // 审核表单
+    const approveForm = reactive({
+      remark: ''
+    })
     const rules = reactive({
-      applyType: [
+      remark: [
         {
           required: true,
-          message: "请选择请假类型",
-          trigger: "blur",
-        },
-      ],
-      date: [{ required: true, message: "请选择请假时间", trigger: "blur" }],
-      reasons: [{ required: true, message: "请输入请假原因", trigger: "blur" }],
-    });
-    //操作类型
-    const action = ref("create");
-    // 查看休假详情显示开关
-    const detailShow = ref(false)
-    // 查看详情数据
-    const detailData = reactive({})
+          messages: '请输入审核意见',
+          trigger: 'blur'
+        }
+      ]
+    })
     onMounted(() => {
       getLeaveListRequest();
     });
     //获取审批列表数据
     const getLeaveListRequest = async () => {
-      const params = { ...queryForm, ...pageData };
+      const params = { ...queryForm, ...pageData, type: 'approve' };
       try {
         const res = await proxy.$api.getLeaveList(params);
         leaveData.value = res.list;
@@ -276,43 +231,8 @@ export default {
       pageData.pageNum = current;
       getLeaveListRequest();
     };
-		// 申请请假按钮事假
-		const applyHandler = () => {
-			isShow.value = true
-		};
-		// 弹窗取消按钮事件
-		const dialogCancelHandler = () => {
-			isShow.value = false
-		};
-		// 弹窗确定按钮事件
-		const dialogSubmitHandler = () => {
-			proxy.$refs['applyRuleForm'].validate(async (valid) => {
-				try {
-          if (valid) {
-            let params = {...applyForm, startTime: applyForm.date[0], endTime: applyForm.date[1]};
-            params.action = action.value;
-            await proxy.$api.postLeave_C(params);
-            if(params.action === 'create'){
-                proxy.$message.success('申请休假成功');
-            }
-            isShow.value = false;
-            getLeaveListRequest();
-          } else {
-            proxy.$message.error('您填写的信息不符合规则，请重新输入');
-            return false;
-          }
-        } catch (error) {
-          proxy.$message.error(error.stack)
-        }
-			});
-		};
-		// 休假时间下拉选中事件
-		const leaveTimeChange = (val) => {
-			const [startTime, endTime] = [val[0], val[1]]
-			applyForm.leaveTime = (endTime - startTime) / (24 * 60 * 60 * 1000) + 1
-		};
     // 表格每行查看按钮事件
-    const handleSee = (row) => {
+    const handleAudit = (row) => {
       detailData.applyType = {
         1: "事假",
         2: "调休",
@@ -330,16 +250,33 @@ export default {
       }[row.applyState]
       detailData.applyState = row.applyState
       detailData.curAuditUserName = row.curAuditUserName
+      detailData.applyUser = row.applyUser.userName
+      detailData._id = row._id
       detailShow.value = true
     };
-    // 表格每行的作废按钮事件
-    const handleDelete = (_id) => {
-      let params = {_id, action: 'delete'};
-      proxy.$api.postLeave_C(params).then(res => {
-        proxy.$message.success('作废成功！');
-        getLeaveListRequest();
-      }).catch(error => {
-        proxy.$message.error(error.stack)
+    // 审核事件
+    const auditHandler = (type) => {
+      proxy.$refs.ruleForm.validate(async valid => {
+        if (valid) {
+          try {
+            await proxy.$api.postApprove({
+              _id: detailData._id,
+              action: type,
+              remark: approveForm.remark
+            })
+            proxy.$message.success('审核成功！')
+            getLeaveListRequest()
+            onResetHandler('ruleForm')
+            detailShow.value = false
+            const count = await proxy.$api.getApproveCount();
+            proxy.$store.commit('SET_NOTICE_COUNT', count)
+          } catch (error) {
+            proxy.$message.error(error.message)
+          }
+        } else {
+          proxy.$message.error('请输入审核意见')
+          return false
+        }
       })
     }
     return {
@@ -347,22 +284,16 @@ export default {
       leaveData,
       columList,
       pageData,
-      rules,
-      action,
-			isShow, // 申请请假弹出显示开关
-			applyForm, // 申请请假表单
       detailShow, // 查看详情显示开关
       detailData, // 查看详情数据
+      approveForm, // 审核表单
+      rules, // 审核规则
       getLeaveListRequest, // 获取审批列表数据
       onSearchHandler, // 搜索事件
       onResetHandler, // 重置事件
       handleCurrentChange, // 页码改变事件
-			applyHandler, // 申请请假事件
-			dialogCancelHandler, // 弹窗取消按钮事件
-			dialogSubmitHandler, // 弹窗确定按钮事件
-			leaveTimeChange, // 休假时间下拉选中事件
-      handleSee, // 表格每行查看按钮事件
-      handleDelete, // 表格每行的作废按钮事件
+      handleAudit, // 表格每行查看按钮事件
+      auditHandler // 审核事件
     };
   },
 };

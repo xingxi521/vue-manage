@@ -14,5 +14,10 @@ export default {
     SET_BTNLIST(state, btnList) {
         state.btnList = btnList
         stroage.setItem('btnList', btnList)
+    },
+    // 设置通知数量
+    SET_NOTICE_COUNT(state, noticeCount) {
+        state.noticeCount = noticeCount
+        stroage.setItem('noticeCount', noticeCount)
     }
 }
